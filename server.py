@@ -11,8 +11,6 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-cursor = sqlite3.connect('db').cursor()
-
 categories = ["grave", "circunflexo", "cedilha", "til", "agudo", "hífen"]
 
 @app.route('/words', methods=['POST'])
@@ -27,6 +25,7 @@ def words():
 
 # returns array of words
 def exec_query(wordset):
+    cursor = sqlite3.connect('db').cursor()
     n = wordset['n']
     assert(n > 0 and n < 500) # possivelmente vou querer aumentar o limite
     conditions = read_categories(wordset)
