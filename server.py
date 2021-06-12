@@ -25,15 +25,16 @@ def words():
 
 # returns array of words
 def exec_query(wordset):
-    cursor = sqlite3.connect('db').cursor()
     n = wordset['n']
     assert(n > 0 and n < 500) # possivelmente vou querer aumentar o limite
     conditions = read_categories(wordset)
     join_conditions = 'WHERE ' + ' AND '.join(conditions) if len(conditions) > 0 else ''
     query = 'SELECT lower(word) FROM words ' + join_conditions + ' ORDER BY RANDOM() LIMIT ' + str(n)
     print(query)
+    cursor = sqlite3.connect('db').cursor()
     cursor.execute(query)
     res = cursor.fetchall()
+    cursor.close()
     return [word_tuple[0] for word_tuple in res]
 
 def read_categories(wordset):
